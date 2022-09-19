@@ -103,7 +103,7 @@ public abstract class TTEATools {
             }
         }
 
-        int contextStart = TTEATools.H1 + (richPlain[0] & (TTEATools.ONE_BLOCK) - 1) + TTEATools.H2;
+        int contextStart = TTEATools.H1 + (richPlain[0] & (TTEATools.ONE_BLOCK - 1)) + TTEATools.H2;
         for (int i = 1; i <= TTEATools.T7; i++) {
             if (richPlain[richPlain.length - i] != 0) {
                 return null;
