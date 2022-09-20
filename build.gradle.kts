@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     id("maven-publish")
+    id("signing")
 }
 
 group = "io.github.xtyuns"
@@ -17,6 +18,21 @@ dependencies {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType<Javadoc> {
+    options.encoding = System.getProperty("file.encoding") ?: "UTF-8"
+    if (JavaVersion.current().isJava9Compatible) {
+        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+    }
 }
 
 publishing {
@@ -47,6 +63,22 @@ publishing {
                 name.set(project.name)
                 description.set("Tencent Tiny Encryption algorithm library")
                 url.set("https://github.com/xtyuns/TTEA4j")
+
+                licenses {
+                    license {
+                        name.set("Apache License, Version 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("xtyuns")
+                        name.set("xtyuns")
+                        email.set("xtyuns@163.com")
+                    }
+                }
+
                 scm {
                     connection.set("scm:git:git://github.com/xtyuns/TTEA4j.git")
                     developerConnection.set("scm:git:ssh://github.com/xtyuns/TTEA4j.git")
@@ -64,4 +96,8 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign(publishing.publications["-${project.name}-"])
 }
